@@ -1,4 +1,7 @@
-# Spinners had me wrapped around an axel #
+Spinners had me wrapped around an axel
+=====================================
+**Author:** *Timothy Greenfield*
+**Date:** *5/13/19*
 
 *but I got free*
 
@@ -23,20 +26,24 @@ instantiate it, and pass data across the ether using Injection Tokens.
 
 
 **The Tech:**
+
 Angular Service
+
 Angular CDK - Overlays
+
 Injection Tokens
+
 MatProgressSpinner
 
 ## Step 1 - Take care of of our CLI business ##
  
-<kbd>
+```shell
 ng new SpinnerTutorial --routing
 cd SpinnerTutorial
 ng g service spinner/spinner
 ng g component spinner
 npm install @angular/material @angular/cdk
-</kbd>
+```
 
 I'm putting the spinner service in the src/app/spinner directory
 because this is just a sample project.  On bigger efforts I would move
