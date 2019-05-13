@@ -1,5 +1,5 @@
-### Spinners had me wrapped around an axel
-# but seriously I got free
+# Spinners had me wrapped around an axel
+## but seriously I got free
 
 Before we begin I feel compelled to tell you that I'm having a small
 crisis at the moment.  I really don't see the need for puns or clever
@@ -27,7 +27,7 @@ Injection Tokens
 MatProgressSpinner
 
 ## Step 1 - Take care of of our CLI business 
-```javascript 
+```
 ng new SpinnerTutorial --routing
 cd SpinnerTutorial
 ng g service spinner/spinner
@@ -71,7 +71,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     imports: [
         BrowserModule,
         AppRoutingModule,
-		MatProgressSpinnerModule
+        MatProgressSpinnerModule
 
     ],
     entryComponents: [SpinnerComponent],
