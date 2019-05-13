@@ -1,6 +1,7 @@
 # Spinners had me wrapped around an axel #
 
 *but I got free*
+
 Before we begin I feel compelled to tell you that I'm having a small
 crisis at the moment.  I really don't see the need for puns or clever
 titles in technical blogs (ditto for the clever top picture). But,
