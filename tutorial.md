@@ -32,6 +32,7 @@ ng new SpinnerTutorial --routing
 cd SpinnerTutorial
 ng g service spinner/spinner
 ng g component spinner
+npm install @angular/material @angular/cdk
 ```
 
 I'm putting the spinner service in the src/app/spinner directory
@@ -40,3 +41,43 @@ this to the shared portion of the code because, well, sharing is kind
 of the point 
 
 Ok, I think that will take care the CLI for a while
+
+#Step 2 - Spin up our service (:sob: I'm dying here)
+First thing first: go to app.module.ts
+
+- Add your spinner service to the providers array (and notice that it already
+  has an Injectable decorator thanks to the CLI)
+- Add an entryComponents key to the @NgModule hash an add Spinner
+  Component to that
+- Import MatProgressSpinnerModule 
+  
+It should look like this when you are done
+
+```
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { SpinnerService } from './spinner/spinner.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+@NgModule({
+    declarations: [
+        AppComponent,
+        SpinnerComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+		MatProgressSpinnerModule
+
+    ],
+    entryComponents: [SpinnerComponent],
+    providers: [SpinnerService],
+    bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
