@@ -23,4 +23,8 @@ Angular CDK - Overlays
 Injection Tokens
 MatProgressSpinner
 
-#Step 1
+#Step 1 - Create a new Angular Project with routing
+```
+ng new SpinnerTutorial --routing
+```
+
