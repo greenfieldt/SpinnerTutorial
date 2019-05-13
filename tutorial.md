@@ -1,15 +1,15 @@
-# Spinners had me wrapped around an axel
-## but seriously I got free
+# Spinners had me wrapped around an axel #
 
+*but I got free*
 Before we begin I feel compelled to tell you that I'm having a small
 crisis at the moment.  I really don't see the need for puns or clever
 titles in technical blogs (ditto for the clever top picture). But,
 some times I just can't help myself.  Anyways I don't want this soul
 searching to spin out of control so let's get going...
 
-## Spinners the Angular Way
+## Spinners the Angular Way ##
 
-##The Idea:  
+**The Idea:**
 Make a spinner that works as an Angular Service so we can
 use it anywhere without spinning our wheels cut and pasting code.
 
@@ -17,23 +17,25 @@ We can use the MatProgressSpinner in a custom overlay to present the
 spinner.  Invoke it from anywhere using DI by making a service to
 instantiate it, and pass data across the ether using Injection Tokens.
 
-ezee mizee 
+*ezee mizee*
 
 
-# The Tech:
+
+**The Tech:**
 Angular Service
 Angular CDK - Overlays
 Injection Tokens
 MatProgressSpinner
 
-## Step 1 - Take care of of our CLI business 
-```
+## Step 1 - Take care of of our CLI business ##
+ 
+<kbd>
 ng new SpinnerTutorial --routing
 cd SpinnerTutorial
 ng g service spinner/spinner
 ng g component spinner
 npm install @angular/material @angular/cdk
-```
+</kbd>
 
 I'm putting the spinner service in the src/app/spinner directory
 because this is just a sample project.  On bigger efforts I would move
@@ -42,7 +44,8 @@ of the point
 
 Ok, I think that will take care the CLI for a while
 
-## Step 2 - Spin up our service (:sob: I'm dying here)
+## Step 2 - Spin up our service (:sob: I'm dying here) ##
+
 First thing first: go to app.module.ts
 
 - Add your spinner service to the providers array (and notice that it already
@@ -58,7 +61,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent } from './app.component`;
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SpinnerService } from './spinner/spinner.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -78,6 +81,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     providers: [SpinnerService],
     bootstrap: [AppComponent]
 })
+
+
 export class AppModule { }
 ```
+
 
