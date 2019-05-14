@@ -1,4 +1,4 @@
-**Spinners had me wrapped around an axel** but I got free
+**Spinners had me wrapped around an axel**
 =====================================
 **Author:** *Timothy Greenfield*
 
