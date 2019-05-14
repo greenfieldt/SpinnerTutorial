@@ -440,3 +440,224 @@ We are almost there one tricky bit left.  Somehow we need to talk with
 our spinner.component.ts so we can tell it what kind of spinner we
 want and when to turn and off etc.  The way this is accomplished is
 through the use of a custom InjectionToken.
+
+### Make a new file called spinner.config.ts ###
+
+ we are going to put all of our spinner config structures in here and define our custom
+  injection token in here.  Then both spinner.service.ts and
+  spinner.component.ts will import it.  This was we won't cause any
+  circular dependencies!!
+  
+  
+  ```typescript
+import { Injectable, ComponentRef, Injector, InjectionToken } from '@angular/core';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+
+export interface SpinnerConfig {
+    defaultTimeOut?: number,
+    color: string,
+    mode: string,
+    value?: number,
+    diameter?: number,
+    strokeWidth?: number
+
+}
+
+export const SpinnerDefaultConfig: SpinnerConfig = {
+    defaultTimeOut: 6000,
+    color: 'primary',
+    mode: 'indeterminate',
+    diameter: 70,
+    strokeWidth: 7
+};
+
+export class SpinnerOverlayRef {
+
+    constructor(private overlayRef: OverlayRef) { }
+
+    close(): void {
+        this.overlayRef.dispose();
+    }
+}
+
+export const SPINNER_DATA = new InjectionToken<SpinnerConfig>('SPINNER_DATA');
+```
+
+- The SpinnerConfig interface are the things you can set in a
+  MatProgressSpinner
+- The SpinnerDefaultConfig is a convienience structure with some good
+  defaults
+- The SpinnerOverlayRef is a container class that hides the "real"
+  overlay ref and controls what access we give to the hoipoli thae
+  will use it -- In this case we only allow the user to close the
+  spinner 
+  - The SPINNER_DATA constant is our InjectionToken definition
+  
+### Update Spinner.Service.ts ###
+```typescript
+import { Injectable, ComponentRef, Injector } from '@angular/core';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
+import { SpinnerComponent } from './spinner.component';
+import { SpinnerOverlayRef, SpinnerConfig, SPINNER_DATA } from './spinner.config';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SpinnerService {
+
+    OverlaySpinnerConfig = {
+        hasBackdrop: true,
+        backdropClass: 'dark-backdrop',
+        panelClass: '',
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        positionStrategy: this.overlay.position()
+            .global().centerHorizontally().centerVertically()
+    };
+
+    constructor(private injector: Injector, private overlay: Overlay) {
+    }
+
+    _overlayRef: OverlayRef;
+
+    spin(config: SpinnerConfig) {
+        console.log("Spinning!");
+        //Call overlay.create and get back an overlay ref with
+        //our configuration
+        this._overlayRef = this.overlay.create(this.OverlaySpinnerConfig);
+
+        const overlayRef = new SpinnerOverlayRef(this._overlayRef);
+
+        //We are going to make new injectiontoken with our spinner configuration
+        //data
+        const injector = this.createInjector(config, overlayRef);
+
+        //Then -- create a portal with our spinner component and attach
+        //it to our overlay ref 
+        const spinnerPortal = new ComponentPortal(SpinnerComponent, null, injector);
+
+        //Attach the Portal "holding" the Spinnercomponent to the OverlayRef
+        const containerRef: ComponentRef<SpinnerComponent> =
+            this._overlayRef.attach(spinnerPortal);
+
+        //Now we are returning the SpinnerComponentRef (instead of the OverlayRef)
+        return overlayRef;
+
+    }
+
+    private createInjector(config: SpinnerConfig, spinnerRef: SpinnerOverlayRef)
+        : PortalInjector {
+        const injectionTokens = new WeakMap();
+
+        //add this parameter so we can close the spinner
+        injectionTokens.set(SpinnerOverlayRef, spinnerRef);
+        //add this one to pass the config data
+        injectionTokens.set(SPINNER_DATA, config);
+
+        return new PortalInjector(this.injector, injectionTokens);
+    }
+
+    stop() {
+        console.log("Stopping!");
+        this._overlayRef.dispose();
+    }
+
+}
+```
+
+TODO fill in some explanation
+
+### Update App.Component.ts  ###
+Update the app component to use our
+default spinner config
+
+```typescript
+    spinerControl: SpinnerOverlayRef;
+
+    onStart() {
+        let config = SpinnerDefaultConfig;
+        //let it spin until we tell it to stop
+        config.defaultTimeOut = undefined;
+
+        this.spinerControl = this.spinner.spin(config);
+        timer(5000).pipe(
+            tap(_ => {
+                this.onStop();
+            }),
+            take(1)
+        ).subscribe();
+
+    }
+
+    onStop() {
+        this.wait.nativeElement.classList.toggle('hidden');
+        this.spinner.stop();
+        //or we could use
+        //this.spinerControl.close();
+    }
+```
+
+### Last but not least update spinner.component ###
+After all that work we finally have the config data being passed to
+our app component and all we need to do now is use it!
+
+```typescript
+import { Component, OnInit, Inject } from '@angular/core';
+import { SPINNER_DATA, SpinnerConfig, SpinnerOverlayRef } from './spinner.config';
+import { timer } from 'rxjs';
+import { tap, take } from 'rxjs/operators';
+
+@Component({
+    selector: 'app-spinner',
+    templateUrl: './spinner.component.html',
+    styleUrls: ['./spinner.component.scss']
+})
+export class SpinnerComponent implements OnInit {
+    color = 'primary';
+    mode = 'determinate';
+    value = 50;
+    diameter = 50;
+    strokeWidth = 10;
+
+    constructor(public spinnerRef: SpinnerOverlayRef,
+        @Inject(SPINNER_DATA) public config: SpinnerConfig) {
+
+        console.log(config);
+
+        if (config.defaultTimeOut) {
+            this.setTimeOut(config.defaultTimeOut);
+        }
+
+        this.mode = config.mode
+        this.color = config.color;
+
+        if (config.value) {
+            this.value = config.value;
+        }
+
+        if (config.diameter) {
+            this.diameter = config.diameter;
+        }
+
+        if (config.strokeWidth) {
+            this.strokeWidth = config.strokeWidth;
+        }
+
+    }
+
+    ngOnInit() {
+    }
+
+    setTimeOut(timeout: number) {
+        timer(timeout).pipe(
+            tap(_ => this.spinnerRef.close()),
+            take(1),
+        ).subscribe();
+    }
+
+}
+```
+
+ToDo fill in the details
+
+

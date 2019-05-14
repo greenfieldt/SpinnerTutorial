@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { SpinnerService } from './spinner/spinner.service';
 import { timer } from 'rxjs';
 import { tap, take } from 'rxjs/operators'
+import { SpinnerOverlayRef, SpinnerDefaultConfig } from './spinner/spinner.config';
 
 @Component({
     selector: 'app-root',
@@ -16,8 +17,14 @@ export class AppComponent implements OnInit {
 
     ngOnInit() { }
 
+    spinerControl: SpinnerOverlayRef;
+
     onStart() {
-        this.spinner.spin();
+        let config = SpinnerDefaultConfig;
+        //let it spin until we tell it to stop
+        config.defaultTimeOut = undefined;
+
+        this.spinerControl = this.spinner.spin(config);
         timer(5000).pipe(
             tap(_ => {
                 this.onStop();
@@ -30,6 +37,8 @@ export class AppComponent implements OnInit {
     onStop() {
         this.wait.nativeElement.classList.toggle('hidden');
         this.spinner.stop();
+        //or we could use
+        //this.spinerControl.close();
     }
 
     onReset() {
