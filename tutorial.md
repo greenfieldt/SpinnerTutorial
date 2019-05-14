@@ -705,7 +705,7 @@ export class SpinnerComponent implements OnInit {
 
 Notes :
 Just a reminder from the Angular docs
-
+An Inject decorator is:
 > A parameter decorator on a dependency parameter of a class constructor that specifies a custom provider of the dependency.
 
 Do you see the circle of life here 
@@ -737,4 +737,4 @@ and in spinner.component.ts it pops back out
 ```
 
 ## I put the best spin 🤦 on this I could ##
-Using the CDK is a powerful tool
+Using the CDK + Injection is a powerful tool and I'm out of puns.
