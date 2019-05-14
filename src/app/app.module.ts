@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SpinnerService } from './spinner/spinner.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
     declarations: [
@@ -16,7 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         BrowserModule,
         AppRoutingModule,
         MatProgressSpinnerModule,
-
+        OverlayModule
     ],
     entryComponents: [SpinnerComponent],
     providers: [SpinnerService],
