@@ -6,11 +6,10 @@
 
 ---
 
-***Before we begin I feel compelled to tell you that I'm having a small
-crisis at the moment.  I really don't see the need for puns or clever
-titles in technical blogs (ditto for the clever top picture). But,
-some times I just can't help myself.  Anyways I don't want this soul
-searching to spin out of control so let's get going...***
+***Before we begin I feel compelled to tell you that I'm firmly against
+clever titles, pictures, double entendres, and most especially puns.
+I would never sneak to such depths as they only cheapen the final
+product, and we, as the technical community, should rise above such things.***
 
 
 ![Photo by www.localfitness.com.au](https://upload.wikimedia.org/wikipedia/commons/f/fa/Spin_Cycle_Indoor_Cycling_Class_at_a_Gym.JPG "Photo by www.localfitness.com.au")
@@ -18,11 +17,15 @@ searching to spin out of control so let's get going...***
 
 **The Idea:**
 Make a spinner that works as an Angular Service so we can
-use it anywhere without spinning our wheels cut and pasting code.
+use it anywhere without spinning our wheels :] cut and pasting code.
 
-We can use the MatProgressSpinner in a custom overlay to present the
-spinner.  Invoke it from anywhere using DI by making a service to
-instantiate it, and pass data across the ether using Injection Tokens.
+To display the spinner outside of the workflow of any particular
+screen we will utilize the Overlay Container though the use of a
+Portal and pass data to our display component with at custom
+InjectionToken.  And, finally for good hygiene, we will return a handle
+to that structures the interactions the user code can have with our
+display component.
+
 
 *ezee mizee*
 
@@ -32,34 +35,32 @@ instantiate it, and pass data across the ether using Injection Tokens.
 
 Angular Service
 
-Angular CDK - Overlays
+Angular CDK (Overlays and Portals)
 
 Injection Tokens
 
-MatProgressSpinner
+Angular Material (MatProgressSpinner)
 
 ## Step 1 - Take care of of our CLI business ##
  
 ```shell
-ng new SpinnerTutorial --routing
+ng new SpinnerTutorial
 cd SpinnerTutorial
 ng g service spinner/spinner
 ng g component spinner
-npm install --save @angular/material @angular/cdk @angular/animations
+npm install --save @angular/material @angular/cdk
 ```
 
-I'm putting the spinner service in the src/app/spinner directory
-because this is just a sample project.  On bigger efforts I would move
-this to the shared portion of the code because, well, sharing is kind
-of the point 
+I'm putting the spinner service in the src/app/spinner directory along
+with the spinner component.  I think this makes sense in this case as
+the two aspects of a single whole (i.e., you can't have one without
+the other). 
 
+Ok, I think that will take care the CLI for a while.
 
+## Step 2 - Spin up our service (:joy: I'm dying here) ##
 
-Ok, I think that will take care the CLI for a while
-
-## Step 2 - Spin up our service (:sob: I'm dying here) ##
-
-First thing first: go to app.module.ts
+First things first: go to app.module.ts
 
 - Add your spinner service to the providers array (and notice that it already
   has an Injectable decorator thanks to the CLI)
@@ -103,7 +104,7 @@ export class AppModule { }
 
 
 ## Step 3 - Wait for it .... (ha ha ha, so good) ##
-We need something to wait for so we can test our spinner. 
+Make something to wait for so we can test our spinner. 
 
 - Go to app.component.html and add the following
 
@@ -157,7 +158,7 @@ We need something to wait for so we can test our spinner.
 .stop-text {
     color:red;
     font-size:36px;
-}    
+}
 
 .hidden {
     visibility:hidden;
@@ -231,13 +232,15 @@ export class AppComponent implements OnInit {
 }
 ```
 
-## Step 4 - Spin up the overlay ##
+## Step 4 - Spin up :bowtie: the overlay ##
 
-It's finally business time, so let's review our goals
+We are getting down to business now.  Let's review our goals for step 4.
  + Display a MatProgressSpinner as an overlay
  + Pass it configuration data using InjectTokens
  
  - Add a MatProgressSpinner in spinner.component.[ts|htmlcss]
+ 
+ 
  We are going to add the default MatProgressSpinner to our spinner
  component.  This one is taken right out of [Angular
  Material](https://material.angular.io/components/progress-spinner/examples
@@ -245,6 +248,7 @@ It's finally business time, so let's review our goals
  too... perhaps look to [SpinKit](https://tobiasahlin.com/spinkit/
  "SpinKit") for inspiration.
  
+ spiner.component.ts
  ```typescript
  import { Component, OnInit } from '@angular/core';
 
@@ -267,6 +271,7 @@ export class SpinnerComponent implements OnInit {
 
 }
 ```
+spinner.component.html
 
 ```html
 <mat-progress-spinner
@@ -279,6 +284,7 @@ export class SpinnerComponent implements OnInit {
 </mat-progress-spinner>
 ```
 
+spinner.component.scss
 ```css
 .spinner-margin {
   margin: 0 10px;
@@ -287,7 +293,7 @@ export class SpinnerComponent implements OnInit {
 
 - Now let's deal with the
   [CDK](https://material.angular.io/cdk/categories "CDK"),  The
-  Angular guys say
+  Angular CDK guys say
 
     >   The Component Dev Kit (CDK) is a set of tools that implement
     >   common interaction patterns whilst being unopinionated about their
@@ -297,15 +303,16 @@ export class SpinnerComponent implements OnInit {
     >   state of well-tested functionality upon which you can develop your
     >   own bespoke components.
   
- All right then, let's start elucidating 
+So the CDK is a toolbox we can use to make whatever we want to
+make. The tool we need is the Overlay.  This particular tool needs
+some css styling so you need to either 1.) Use Material Design or 2.)
+@import the css yourself into your src/styles.scss.
  
   * We are using Angular Material so we don't need to `@import
  '~@angular/cdk/overlay-prebuilt.css';` *
 
- 
- - Overlays need an OverlayConfig that defines backdrop, panel,
- position strategy and scroll strategy. 
- 
+### Overlays need an OverlayConfig that defines backdrop, panel, position strategy and scroll strategy. ###
+
  We want our spinner to show up
  in the center of the page (position strategy), make the entire page a
  little darker (backdrop), and
@@ -323,6 +330,7 @@ spinner.service.ts
     };
  ```
 
+We can define the dark-back drop in our global scss 
  
 src/styles.scss (add the dark-back-drop styles)
 ```css
@@ -334,10 +342,11 @@ src/styles.scss (add the dark-back-drop styles)
 }
 ```
 
-- An Overlay has content injected into it with a Portal so we need to
-create our Overlay using the config we just defined and then tell it
-to display our spinner component using the Portal interface (harder
-said than done)
+Overlays have content injected into them by Portals. In the next code
+snippet we are going to create our Overlay using the config then make
+a ComponentPortal with the thing we want to display (SpinnerComponent)
+and attach it to the overlay (easier done than said)
+
 
 spinner.service.ts
  ```typescript
@@ -361,15 +370,14 @@ spinner.service.ts
  
  
 After all that work lets run the code and see our spinner.  Drum roll
-please, click the green button and ... nothing happened????
+please, dum de dum dum... click the green button and ... nothing happened????
 
 ### Let's take a quick sidetrack on what overlays really do and how to
 debug them ###
 
-If you followed these steps just like I put them in this probably
-happened to you to so how would we debug this.  First we need to know
-what should happen.  All overlays get created in a div element with  cdk-overlay-container
-class.  
+Open your console in your web browser and go to the element
+inspector.  Towards the bottom of your html look for a div element
+with the class cdk-overlay-container.
 
 You will find this right after your scripts in your
 element explorer.  Here is what mine says: 
@@ -411,7 +419,9 @@ element explorer.  Here is what mine says:
   </div>
 </div>
 ```
-Some things to note you can see there is a 
+Some things to note:
+
+you can see there is a 
 - a div element with a cdk-overlay-backdrop class and our custom
   back-drop class (dark-backdrop)
 - a div element with a cdk-global-overlay-wrapper class
@@ -420,35 +430,39 @@ centered)
 - a div element with class cdk-overlay-0 which has our app-spinner tag
   in it
   
-  So that is all basically good news.  We seem to have created the
-  overlay we meant to create, and yet no spinner.  In this case the
-  problem doesn't seem to be with the overlay at all.  Most of you
-  have already spotted the error message in console that we've been
-  ignoring.  The problem in this case is that we haven't defined the
-  default theme for Material.  Let's do so
+So that is all basically good news.  We seem to have created the
+overlay we meant to create, and yet no spinner.  In this case the
+problem doesn't seem to be with the overlay at all.  Most of you have
+already spotted the error message in console that we've been
+ignoring.  
+
+The problem in this case is Material Design is a theme based framework
+and it can't really do much until you tell it what theme to use.  If
+you did a default install the standard themes are included in a directory called
+node_modules/@angular/material/prebuilt-themes.  You need to pick one
+of these and import it into your global scss.
   
   styles.scss
   ```
   @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 ```
 
-And now we have our spinner (it still isn't very exciting because it
-is just a half circle not doing anything but hey...baby steps)
+Try to click the green button again and now we have our spinner (it
+still isn't very exciting because it is just a half circle not doing
+anything but hey...baby steps)
 
 ## Step 5 - Spin-ding 👊🏼 some quality time with our component ##
-We are almost there one tricky bit left.  Somehow we need to talk with
-our spinner.component.ts so we can tell it what kind of spinner we
-want and when to turn and off etc.  The way this is accomplished is
-through the use of a custom InjectionToken.
+We are almost there! one tricky bit left.  Somehow we need to communicate with
+our spinner.component.ts so we can pass it configuration information.
+The way this is accomplished is through the use of a custom InjectionToken.
 
 ### Make a new file called spinner.config.ts ###
 
- we are going to put all of our spinner config structures in here and define our custom
-  injection token in here.  Then both spinner.service.ts and
-  spinner.component.ts will import it.  This was we won't cause any
-  circular dependencies!!
+ We need to put all of our spinner config structures in here as well
+  as anything that both the spinner service and the spinner component
+  are going to need so we don't cause circular dependencies.
   
-  
+  spinner.config.ts
   ```typescript
 import { Injectable, ComponentRef, Injector, InjectionToken } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -480,20 +494,44 @@ export class SpinnerOverlayRef {
     }
 }
 
-export const SPINNER_DATA = new InjectionToken<SpinnerConfig>('SPINNER_DATA');
+export interface SpinnerConfigWithOverlay {
+    spinnerRef: SpinnerOverlayRef;
+    config: SpinnerConfig;
+}
+
+export const SPINNER_DATA = new InjectionToken<SpinnerConfigWithOverlay>('SPINNER_DATA');
 ```
 
-- The SpinnerConfig interface are the things you can set in a
-  MatProgressSpinner
+- The SpinnerConfig interface comes right from the customizable
+  apsects of the MatProgressSpinner.
 - The SpinnerDefaultConfig is a convienience structure with some good
-  defaults
+  defaults to make life easier.
 - The SpinnerOverlayRef is a container class that hides the "real"
-  overlay ref and controls what access we give to the hoipoli thae
-  will use it -- In this case we only allow the user to close the
-  spinner 
-  - The SPINNER_DATA constant is our InjectionToken definition
+  overlayRef and controls what access we give to the users of the
+  service.
+  
+  From the Angular guys:
+
+    > Use an InjectionToken whenever the type you are injecting is not reified (does not have a runtime representation) such as when injecting an interface, callable type, array or parameterized type.
+
+Just a sec,  let me look up reified, 
+
+> Making something abstract more concrete or real
+
+What do you know we've been reifing all this time and we didn't know
+it, but let's not digress.
+  
+- The SPINNER_DATA constant is our InjectionToken definition we've
+  used the simplest InjectionToken with just a type and a desc.  If
+  needed you can pass in optional parameters to define a "providedIn"
+  and Factory to create it (similar @Injectable)
   
 ### Update Spinner.Service.ts ###
+With these new types we need to finish off our Spinner.Service
+class by modifying it to expect a config parameter, create the
+injection token, and return SpinnerOverlayRef instead of the
+OverlayRef.
+
 ```typescript
 import { Injectable, ComponentRef, Injector } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -565,11 +603,17 @@ export class SpinnerService {
 }
 ```
 
-TODO fill in some explanation
+Notes:
+- A portal injector is a custom injector used when providing custom
+  injection tokens to components inside a portal (relevant no?)
+  
+  
 
 ### Update App.Component.ts  ###
-Update the app component to use our
-default spinner config
+Update the App.Component.ts to use our SpinnerDefaultConfig and pass
+it to spinner.service.  We've left ourselves three ways of stopping
+the spinner, passing a timeout, using the SpinnerOverlayRef, or
+calling the spinner service stop method.
 
 ```typescript
     spinerControl: SpinnerOverlayRef;
@@ -619,7 +663,8 @@ export class SpinnerComponent implements OnInit {
     diameter = 50;
     strokeWidth = 10;
 
-    constructor(public spinnerRef: SpinnerOverlayRef,
+    constructor(
+        @Inject(SPINNER_DATA) public spinnerRef: SpinnerOverlayRef,
         @Inject(SPINNER_DATA) public config: SpinnerConfig) {
 
         console.log(config);
@@ -658,6 +703,38 @@ export class SpinnerComponent implements OnInit {
 }
 ```
 
-ToDo fill in the details
+Notes :
+Just a reminder from the Angular docs
+
+> A parameter decorator on a dependency parameter of a class constructor that specifies a custom provider of the dependency.
+
+Do you see the circle of life here 
+in spinner.config we defined
+```typescript
+export interface SpinnerConfigWithOverlay {
+    spinnerRef: SpinnerOverlayRef;
+    config: SpinnerConfig;
+}
+
+export const SPINNER_DATA = new InjectionToken<SpinnerConfigWithOverlay>('SPINNER_DATA');
+```
 
 
+in spiner.service.ts we set
+```typescript
+        //add this parameter so we can close the spinner
+        injectionTokens.set(SpinnerOverlayRef, spinnerRef);
+        //add this one to pass the config data
+        injectionTokens.set(SPINNER_DATA, config);
+```
+
+and in spinner.component.ts it pops back out
+
+```typescript
+    constructor(
+        @Inject(SPINNER_DATA) public spinnerRef: SpinnerOverlayRef,
+        @Inject(SPINNER_DATA) public config: SpinnerConfig) {
+```
+
+## I put the best spin 🤦 on this I could ##
+Using the CDK is a powerful tool

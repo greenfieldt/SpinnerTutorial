@@ -15,7 +15,9 @@ export class SpinnerComponent implements OnInit {
     diameter = 50;
     strokeWidth = 10;
 
-    constructor(public spinnerRef: SpinnerOverlayRef,
+
+    constructor(
+        @Inject(SPINNER_DATA) public spinnerRef: SpinnerOverlayRef,
         @Inject(SPINNER_DATA) public config: SpinnerConfig) {
 
         console.log(config);

@@ -28,4 +28,9 @@ export class SpinnerOverlayRef {
     }
 }
 
-export const SPINNER_DATA = new InjectionToken<SpinnerConfig>('SPINNER_DATA');
+export interface SpinnerConfigWithOverlay {
+    spinnerRef: SpinnerOverlayRef;
+    config: SpinnerConfig;
+}
+
+export const SPINNER_DATA = new InjectionToken<SpinnerConfigWithOverlay>('SPINNER_DATA');
