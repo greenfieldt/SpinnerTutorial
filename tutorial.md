@@ -17,7 +17,7 @@ product, and we, as the technical community, should rise above such things.***
 
 **The Idea:**
 Make a spinner that works as an Angular Service so we can
-use it anywhere without spinning our wheels :] cut and pasting code.
+use it anywhere without spinning our wheels 🙇 cut and pasting code.
 
 To display the spinner outside of the workflow of any particular
 screen we will utilize the Overlay Container though the use of a
@@ -58,7 +58,7 @@ the other).
 
 Ok, I think that will take care the CLI for a while.
 
-## Step 2 - Spin up our service (:joy: I'm dying here) ##
+## Step 2 - Spin up our service (😂 I'm dying here) ##
 
 First things first: go to app.module.ts
 
