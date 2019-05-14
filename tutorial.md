@@ -8,7 +8,7 @@
 
 ***Before we begin I feel compelled to tell you that I'm firmly against
 clever titles, pictures, double entendres, and most especially puns.
-I would never sneak to such depths as they only cheapen the final
+I would never sink to such depths as they only cheapen the final
 product, and we, as the technical community, should rise above such things.***
 
 
@@ -232,7 +232,7 @@ export class AppComponent implements OnInit {
 }
 ```
 
-## Step 4 - Spin up :bowtie: the overlay ##
+## Step 4 - Spin up 😏 the overlay ##
 
 We are getting down to business now.  Let's review our goals for step 4.
  + Display a MatProgressSpinner as an overlay
@@ -372,8 +372,7 @@ spinner.service.ts
 After all that work lets run the code and see our spinner.  Drum roll
 please, dum de dum dum... click the green button and ... nothing happened????
 
-### Let's take a quick sidetrack on what overlays really do and how to
-debug them ###
+### Let's take a quick sidetrack on what overlays really do and how to debug them ###
 
 Open your console in your web browser and go to the element
 inspector.  Towards the bottom of your html look for a div element
@@ -704,11 +703,13 @@ export class SpinnerComponent implements OnInit {
 ```
 
 Notes :
-Just a reminder from the Angular docs
-An Inject decorator is:
+Just a reminder from the Angular docs: An 'Inject decorator' is:
+
 > A parameter decorator on a dependency parameter of a class constructor that specifies a custom provider of the dependency.
 
-Do you see the circle of life here 
+Do you see the circle of life ?
+
+
 in spinner.config we defined
 ```typescript
 export interface SpinnerConfigWithOverlay {
