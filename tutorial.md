@@ -231,13 +231,13 @@ export class AppComponent implements OnInit {
 }
 ```
 
-## Step 4 - Spin-ding 👊🏼 some quality time with our component ##
+## Step 4 - Spin up the overlay ##
 
 It's finally business time, so let's review our goals
  + Display a MatProgressSpinner as an overlay
  + Pass it configuration data using InjectTokens
  
- - Add a MatProgressSpinner in spinner.component.[ts|html
+ - Add a MatProgressSpinner in spinner.component.[ts|htmlcss]
  We are going to add the default MatProgressSpinner to our spinner
  component.  This one is taken right out of [Angular
  Material](https://material.angular.io/components/progress-spinner/examples
@@ -267,7 +267,7 @@ export class SpinnerComponent implements OnInit {
 
 }
 ```
- 
+
 ```html
 <mat-progress-spinner
   class="spinner-margin"
@@ -277,6 +277,12 @@ export class SpinnerComponent implements OnInit {
   [diameter]="diameter"
   [strokeWidth]="strokeWidth">
 </mat-progress-spinner>
+```
+
+```css
+.spinner-margin {
+  margin: 0 10px;
+}
 ```
 
 - Now let's deal with the
@@ -316,7 +322,9 @@ spinner.service.ts
             .global().centerHorizontally().centerVertically()
     };
  ```
-app.component.scss (add the dark-back-drop styles)
+
+ 
+src/styles.scss (add the dark-back-drop styles)
 ```css
 .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
   &.dark-backdrop {
@@ -427,3 +435,8 @@ centered)
 And now we have our spinner (it still isn't very exciting because it
 is just a half circle not doing anything but hey...baby steps)
 
+## Step 5 - Spin-ding 👊🏼 some quality time with our component ##
+We are almost there one tricky bit left.  Somehow we need to talk with
+our spinner.component.ts so we can tell it what kind of spinner we
+want and when to turn and off etc.  The way this is accomplished is
+through the use of a custom InjectionToken.
