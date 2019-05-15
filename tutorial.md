@@ -1,10 +1,10 @@
 **Spinners had me wrapped around an axel**
 =====================================
 **Author:** *Timothy Greenfield*
-![Author](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/IncreateSoftware%2Ftim.jpg?alt=media&token=6c7b45d3-3313-4c16-9c0a-0ef1f725d6d1 "Author")
 
 **Date:** *5/13/19*
 
+![The Author](https://firebasestorage.googleapis.com/v0/b/increatesoftware.appspot.com/o/IncreateSoftware%2Ftim.jpg?alt=media&token=8a6dbaff-7b83-484f-9be5-b8436b737878 "The Author")
 ---
 
 ***Before we begin I feel compelled to tell you that I'm firmly against
