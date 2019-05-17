@@ -241,7 +241,7 @@ export class AppComponent implements OnInit {
 }
 ```
 
-## Spin up 😏 the overlay ##
+## Take a spin 😏 around the overlay ##
 
 We are getting down to business now.  Let's review our goals for step 4.
  + Display a MatProgressSpinner as an overlay
