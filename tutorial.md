@@ -112,7 +112,7 @@ export class AppModule { }
 ```
 
 
-## Wait for it ....  ##
+#### Wait for it ....  ####
 Make something to wait for so we can test our spinner. 
 
 - Go to app.component.html and add the following
@@ -464,7 +464,7 @@ We are almost there! one tricky bit left.  Somehow we need to communicate with
 our spinner.component.ts so we can pass it configuration information.
 The way this is accomplished is through the use of a custom InjectionToken.
 
-### Make a new file called spinner.config.ts ####
+#### Make a new file called spinner.config.ts #####
 
  We need to put all of our spinner config structures in here as well
   as anything that both the spinner service and the spinner component
