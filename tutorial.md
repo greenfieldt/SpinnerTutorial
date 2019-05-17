@@ -50,7 +50,7 @@ Injection Tokens
 
 Angular Material (MatProgressSpinner)
 
-## CLI ##
+#### CLI ####
  
 ```shell
 ng new SpinnerTutorial
