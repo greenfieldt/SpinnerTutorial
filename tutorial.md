@@ -50,7 +50,7 @@ Injection Tokens
 
 Angular Material (MatProgressSpinner)
 
-## Step 1 - Take care of of our CLI business ##
+## CLI ##
  
 ```shell
 ng new SpinnerTutorial
@@ -67,7 +67,7 @@ the other).
 
 Ok, I think that will take care the CLI for a while.
 
-## Step 2 - Spin up our service (😂 I'm dying here) ##
+## Spin up our service 😂  ##
 
 First things first: go to app.module.ts
 
@@ -112,7 +112,7 @@ export class AppModule { }
 ```
 
 
-## Step 3 - Wait for it .... (ha ha ha, so good) ##
+## Wait for it ....  ##
 Make something to wait for so we can test our spinner. 
 
 - Go to app.component.html and add the following
@@ -241,7 +241,7 @@ export class AppComponent implements OnInit {
 }
 ```
 
-## Step 4 - Spin up 😏 the overlay ##
+## Spin up 😏 the overlay ##
 
 We are getting down to business now.  Let's review our goals for step 4.
  + Display a MatProgressSpinner as an overlay
@@ -320,7 +320,7 @@ some css styling so you need to either 1.) Use Material Design or 2.)
   * We are using Angular Material so we don't need to `@import
  '~@angular/cdk/overlay-prebuilt.css';` *
 
-### Overlays need an OverlayConfig that defines backdrop, panel, position strategy and scroll strategy. ###
+#### Overlays need an OverlayConfig that defines backdrop, panel, position strategy and scroll strategy. ####
 
  We want our spinner to show up
  in the center of the page (position strategy), make the entire page a
@@ -381,7 +381,7 @@ spinner.service.ts
 After all that work lets run the code and see our spinner.  Drum roll
 please, dum de dum dum... click the green button and ... nothing happened????
 
-### Let's take a quick sidetrack on what overlays really do and how to debug them ###
+#### Let's take a quick sidetrack on what overlays really do and how to debug them ####
 
 Open your console in your web browser and go to the element
 inspector.  Towards the bottom of your html look for a div element
@@ -459,12 +459,12 @@ Try to click the green button again and now we have our spinner (it
 still isn't very exciting because it is just a half circle not doing
 anything but hey...baby steps)
 
-## Step 5 - Spin-ding 👊🏼 some quality time with our component ##
+## Spin-ding 👊🏼 some quality time with our component ##
 We are almost there! one tricky bit left.  Somehow we need to communicate with
 our spinner.component.ts so we can pass it configuration information.
 The way this is accomplished is through the use of a custom InjectionToken.
 
-### Make a new file called spinner.config.ts ###
+### Make a new file called spinner.config.ts ####
 
  We need to put all of our spinner config structures in here as well
   as anything that both the spinner service and the spinner component
@@ -534,7 +534,7 @@ it, but let's not digress.
   needed you can pass in optional parameters to define a "providedIn"
   and Factory to create it (similar @Injectable)
   
-### Update Spinner.Service.ts ###
+#### Update Spinner.Service.ts ####
 With these new types we need to finish off our Spinner.Service
 class by modifying it to expect a config parameter, create the
 injection token, and return SpinnerOverlayRef instead of the
@@ -617,7 +617,7 @@ Notes:
   
   
 
-### Update App.Component.ts  ###
+#### Update App.Component.ts  ####
 Update the App.Component.ts to use our SpinnerDefaultConfig and pass
 it to spinner.service.  We've left ourselves three ways of stopping
 the spinner, passing a timeout, using the SpinnerOverlayRef, or
@@ -649,7 +649,7 @@ calling the spinner service stop method.
     }
 ```
 
-### Last but not least update spinner.component ###
+#### Last but not least update spinner.component ####
 After all that work we finally have the config data being passed to
 our app component and all we need to do now is use it!
 
@@ -746,7 +746,7 @@ and in spinner.component.ts it pops back out
         @Inject(SPINNER_DATA) public config: SpinnerConfig) {
 ```
 
-## I put the best spin 🤦 on this I could ##
+## A good spin 🤦 on the CDK ##
 Using the CDK + Injection is a powerful tool and I'm out of puns.
 
 You can find the sample code here
